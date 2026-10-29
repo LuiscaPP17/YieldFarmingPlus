@@ -321,4 +321,14 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
 
         emit PoolUpdated(poolId, newRewardRate);
     }
+
+    /**
+     * @dev
+     * @param poolId Pool Identifier
+     * @param user User address
+     * @return Amount of pending rewards
+     */
+    function pendingRewards(bytes32 poolId, address user) external view returns (uint256) {
+        return _calculatePendingRewards(poolId, user);
+    }
 }
