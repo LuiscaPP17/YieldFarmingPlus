@@ -270,4 +270,23 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
 
         emit Withdrawn(poolId, msg.sender, amount);
     }
+
+    /**
+     * @dev Claim pending rewards
+     * @param poolId Pool Identifier
+     */
+    function claimRewards(bytes32 poolId) external nonReentrant {
+        _updatePool(poolId);
+
+        uint256 pending = _calculatePendingRewards(poolId, msg.sender);
+        require(pending > 0, "No rewards to claim");
+
+        UserInfo storage user = userInfo[poolId][msg.sender];
+        user.rewardDebt = user.amount * pools[poolId].rewardPerTokenStored / 1e18;
+        user.lastClaimTime = block.timestamp;
+
+        _safeRewardTransfer(msg.sender, pending);
+
+        emit RewardClaimed(poolId, msg.sender, pending);
+    }
 }
