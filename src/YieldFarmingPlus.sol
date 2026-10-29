@@ -304,4 +304,21 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
 
         emit OwedRewardsClaimed(msg.sender, owed);
     }
+
+    /**
+     * @dev Updates the reward rate of an active pool
+     * @param poolId Pool Identifier
+     * @param newRewardRate New reward rate per second
+     */
+    function updatePoolRewardRate(bytes32 poolId, uint256 newRewardRate) external onlyOwner {
+        Pool storage pool = pools[poolId];
+
+        require(pool.isActive, "Pool is not active");
+
+        _updatePool(poolId);
+
+        pool.rewardRate = newRewardRate;
+
+        emit PoolUpdated(poolId, newRewardRate);
+    }
 }
