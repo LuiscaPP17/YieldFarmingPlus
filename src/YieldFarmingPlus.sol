@@ -289,4 +289,19 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
 
         emit RewardClaimed(poolId, msg.sender, pending);
     }
+
+    /**
+     * @dev Claims the rewards that were owed to the caller because the contract
+     * lacked reward tokens at the time
+     */
+    function claimOwedRewards() external nonReentrant {
+        uint256 owed = owedRewards[msg.sender];
+        require(owed > 0, "No owed rewards");
+
+        owedRewards[msg.sender] = 0;
+
+        _safeRewardTransfer(msg.sender, owed);
+
+        emit OwedRewardsClaimed(msg.sender, owed);
+    }
 }
