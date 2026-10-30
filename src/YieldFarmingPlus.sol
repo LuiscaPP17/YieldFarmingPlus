@@ -344,4 +344,16 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
             pool.token, pool.totalStaked, pool.rewardRate, pool.lastUpdateTime, pool.rewardPerTokenStored, pool.isActive
         );
     }
+
+    /**
+     * @dev Returns a unique position identifier for a user in a pool
+     * @param poolId Pool Identifier
+     * @param user Address user
+     * @return positionId Unique identifier of the user's position
+     */
+    function getUserPositionId(bytes32 poolId, address user) external view returns (bytes32 positionId) {
+        UserInfo storage userInfoData = userInfo[poolId][user];
+
+        positionId = encoder.encodeYieldPosition(user, poolId, userInfoData.amount, userInfoData.lastClaimTime);
+    }
 }
