@@ -356,4 +356,14 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
 
         positionId = encoder.encodeYieldPosition(user, poolId, userInfoData.amount, userInfoData.lastClaimTime);
     }
+
+    /**
+     * @dev Returns a single hash that represents a user across several pools
+     * @param user Address user
+     * @param poolIds Pool Identifiers
+     * @return userHash Hash of the user across the given pools
+     */
+    function getUserMultiPoolHash(address user, bytes32[] calldata poolIds) external view returns (bytes32 userHash) {
+        userHash = encoder.createUserMultiPoolHash(user, poolIds);
+    }
 }
