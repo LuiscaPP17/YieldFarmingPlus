@@ -366,4 +366,20 @@ contract YieldFarmingPlus is ReentrancyGuard, Ownable, Pausable {
     function getUserMultiPoolHash(address user, bytes32[] calldata poolIds) external view returns (bytes32 userHash) {
         userHash = encoder.createUserMultiPoolHash(user, poolIds);
     }
+
+    /**
+     * @dev Get the total number of active pools
+     * @return Number of active pools
+     */
+    function getActivePoolsCount() external view returns (uint256) {
+        return activePools.length;
+    }
+
+    /**
+     * @dev Get all active pools
+     * @return Array with the identifiers of the active pools
+     */
+    function getActivePools() external view returns (bytes32[] memory) {
+        return activePools;
+    }
 }
